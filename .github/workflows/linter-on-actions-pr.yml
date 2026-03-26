@@ -9,8 +9,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  prepare-diff:
+  run-linter:
     runs-on: ubuntu-latest
+    outputs:
+      diff: ${{ steps.get-diff.outputs.diff }}
 
     steps:
       - name: Checkout PR branch
@@ -19,17 +21,18 @@ jobs:
           fetch-depth: 0
 
       - name: Generate PR diff
+        id: get-diff
         run: |
           BASE=${{ github.event.pull_request.base.ref }}
           git fetch origin $BASE
-          git diff origin/$BASE...HEAD > diff.txt
+          DIFF=$(git diff origin/$BASE...HEAD)
+          echo "diff<<EOF" >> $GITHUB_OUTPUT
+          echo "$DIFF" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Upload diff artifact
-        uses: actions/upload-artifact@v4
+      - name: Call reusable workflow
+        uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
+        permissions:
+        secrets: inherit
         with:
-          name: pr-diff
-          path: diff.txt
-
-  run-linter:
-    needs: prepare-diff
-    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
+          DIFF_CONTENT: ${{ steps.get-diff.outputs.diff }}
