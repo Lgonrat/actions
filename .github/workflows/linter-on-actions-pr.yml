@@ -1,4 +1,4 @@
-name: IA Linter on PR
+name: Linter IA on Actions PR
 
 on:
   pull_request:
@@ -10,29 +10,4 @@ permissions:
 
 jobs:
   run-linter:
-    runs-on: ubuntu-latest
-    outputs:
-      diff: ${{ steps.get-diff.outputs.diff }}
-
-    steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Generate PR diff
-        id: get-diff
-        run: |
-          BASE=${{ github.event.pull_request.base.ref }}
-          git fetch origin $BASE
-          DIFF=$(git diff origin/$BASE...HEAD)
-          echo "diff<<EOF" >> $GITHUB_OUTPUT
-          echo "$DIFF" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Call reusable workflow
-        uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
-        permissions:
-        secrets: inherit
-        with:
-          DIFF_CONTENT: ${{ steps.get-diff.outputs.diff }}
+    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
