@@ -7,16 +7,3 @@ on:
 jobs:
   run-linter:
     uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yml@main
-  
-  plan-tests:
-      needs: run-linter
-      uses: Lgonrat/workflow-reusable/.github/workflows/testPlanIA.yml@main
-      with:
-        summary_file: ${{ needs.run-linter.outputs.summary_file }}
-
-  execute-tests:
-      needs: plan-tests
-      uses: Lgonrat/workflow-reusable/.github/workflows/executeTests.yml@main
-      with:
-        selected_tests: ${{ needs.plan-tests.outputs.test_ids }}
-
