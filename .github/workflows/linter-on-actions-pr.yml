@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   run-linter:
     uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
