@@ -1,0 +1,17 @@
+name: 'Install dependencies due to technology'
+description: 'Install dependencies from reusable action'
+inputs:
+  INSTALL_DEPENDENCIES_LIST:
+    description: 'Install dependencies list'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install required dependencies
+      shell: sh
+      run: |
+        action_library_script="${GITHUB_ACTION}/settings.sh"
+        sh "${action_library_script}"
+      env:
+        INSTALL_DEPENDENCIES_LIST: ${{ inputs.INSTALL_DEPENDENCIES_LIST }}
