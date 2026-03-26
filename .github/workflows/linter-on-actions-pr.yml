@@ -1,0 +1,9 @@
+name: Linter IA on Actions PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  run-linter:
+    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yml@main
