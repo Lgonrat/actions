@@ -6,4 +6,4 @@ on:
 
 jobs:
   run-linter:
-    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yml@main
+    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
