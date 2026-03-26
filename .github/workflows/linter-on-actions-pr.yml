@@ -10,28 +10,4 @@ permissions:
 
 jobs:
   run-linter:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Generate PR diff
-        id: diff
-        run: |
-          BASE="${{ github.event.pull_request.base.ref }}"
-          git fetch origin $BASE
-          DIFF=$(git diff origin/$BASE...HEAD)
-          echo "diff<<EOF" >> $GITHUB_OUTPUT
-          echo "$DIFF" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Call LinterIA reusable
-        uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
-        permissions:
-          contents: read
-          pull-requests: write
-        with:
-          DIFF_CONTENT: ${{ steps.diff.outputs.diff }}
+    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
