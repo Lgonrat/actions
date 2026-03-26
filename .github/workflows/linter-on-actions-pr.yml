@@ -10,4 +10,4 @@ permissions:
 
 jobs:
   run-linter:
-    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
+    uses: Lgonrat/workflow-reusable/.github/workflows/linterIA_sinCopilot.yaml@main
