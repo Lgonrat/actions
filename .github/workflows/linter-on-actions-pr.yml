@@ -1,4 +1,4 @@
-name: Linter IA on Actions PR
+name: IA Linter on PR
 
 on:
   pull_request:
@@ -9,5 +9,27 @@ permissions:
   pull-requests: write
 
 jobs:
+  prepare-diff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate PR diff
+        run: |
+          BASE=${{ github.event.pull_request.base.ref }}
+          git fetch origin $BASE
+          git diff origin/$BASE...HEAD > diff.txt
+
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-diff
+          path: diff.txt
+
   run-linter:
+    needs: prepare-diff
     uses: Lgonrat/workflow-reusable/.github/workflows/linterIA.yaml@main
