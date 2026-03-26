@@ -1,4 +1,4 @@
-name: Linter IA on Actions PR
+name: IA Pipeline on PR
 
 on:
   pull_request:
@@ -9,5 +9,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  run-linter:
+  linter:
     uses: Lgonrat/workflow-reusable/.github/workflows/linterIA_sinCopilot.yaml@main
+  
+  test-plan:
+    uses: Lgonrat/workflow-reusable/.github/workflows/testPlanIA.yaml@main   
+    with:
+      summary_file: ${{ needs.linter.outputs.summary_output_file }}
+
